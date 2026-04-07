@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ubc_ocpi_adaptor
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  ocpi-simulator:
+    image: harishsahu/ocpi-simulator:latest
+    ports:
+      - "6002:6002"
+
+  ubc-ocpi-adaptor:
+    image: harishsahu/ubc-ocpi-adaptor-release-v2-app:latest
+    ports:
+      - "6001:6001"
+    depends_on:
+      - postgres
+      - ocpi-simulator
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/ubc_ocpi_adaptor
+      OCPI_SIMULATOR_URL: http://ocpi-simulator:6002
+
+volumes:
+  postgres_data:
