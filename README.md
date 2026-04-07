@@ -34,7 +34,7 @@ Make sure you have installed:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/your-repo.git
+git clone https://github.com/Hks199/bpp_compose.git
 cd your-repo
 ```
 
