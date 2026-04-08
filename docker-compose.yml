@@ -1,9 +1,10 @@
 version: "3.8"
-
+ 
 services:
-
+ 
   postgres:
     image: postgres:16-alpine
+    restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -12,14 +13,20 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
+    networks:
+      - app-network
+ 
   ocpi-simulator:
-    image: harishsahu/ocpi-simulator:latest
+    image: harishsahu/ocpi-simulator:v1
+    restart: unless-stopped
     ports:
       - "6002:6002"
-
+    networks:
+      - app-network
+ 
   ubc-ocpi-adaptor:
-    image: harishsahu/ubc-ocpi-adaptor-release-v2-app:latest
+    image: harishsahu/ubc-ocpi-adaptor-release-v2-app:v2
+    restart: unless-stopped
     ports:
       - "6001:6001"
     depends_on:
@@ -28,6 +35,12 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/ubc_ocpi_adaptor
       OCPI_SIMULATOR_URL: http://ocpi-simulator:6002
-
+    networks:
+      - app-network
+ 
 volumes:
   postgres_data:
+ 
+networks:
+  app-network:
+    driver: bridge

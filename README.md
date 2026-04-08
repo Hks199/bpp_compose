@@ -78,7 +78,7 @@ docker-compose down
 ```
 .
 ├── docker-compose.yml
-├── .env
+├── .env     #optional
 └── README.md
 ```
 
