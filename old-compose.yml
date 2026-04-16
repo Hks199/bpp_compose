@@ -1,39 +1,9 @@
 version: "3.8"
-
+ 
 services:
-  redis-onix-bpp:
-    image: redis:alpine
-    container_name: redis-onix-bpp
-    command: redis-server --requirepass your-redis-password
-    healthcheck:
-      test: ["CMD", "redis-cli", "-a", "your-redis-password", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-    restart: unless-stopped
-    networks:
-      - app-network
-
-  onix-bpp-plugin:
-    image: manendrapalsingh/onix-adapter:v0.9.5
-    container_name: onix-bpp-plugin
-    ports:
-      - "8002:8002"
-    volumes:
-      - ./config:/app/config
-    environment:
-      CONFIG_FILE: /app/config/adapter.yaml
-      REDIS_PASSWORD: your-redis-password
-    depends_on:
-      redis-onix-bpp:
-        condition: service_healthy
-    restart: unless-stopped
-    networks:
-      - app-network
-
+ 
   postgres:
     image: postgres:16-alpine
-    container_name: postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
@@ -45,19 +15,17 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - app-network
-
+ 
   ocpi-simulator:
     image: harishsahu/ocpi-simulator:v1
-    container_name: ocpi-simulator
     restart: unless-stopped
     ports:
       - "6002:6002"
     networks:
       - app-network
-
+ 
   ubc-ocpi-adaptor:
     image: harishsahu/ubc-ocpi-adaptor-release-v2-app:v1
-    container_name: ubc-ocpi-adaptor
     restart: unless-stopped
     ports:
       - "6001:6001"
@@ -69,10 +37,10 @@ services:
       OCPI_SIMULATOR_URL: http://ocpi-simulator:6002
     networks:
       - app-network
-
+ 
 volumes:
   postgres_data:
-
+ 
 networks:
   app-network:
     driver: bridge

@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+
+  ocpi-simulator:
+    image: harishsahu/ocpi-simulator:v1
+    restart: unless-stopped
+    ports:
+      - "6002:6002"
+    networks:
+      - app-network
+
+  migrate:
+    image: harishsahu/ubc-ocpi-adaptor-release-v2-app:v1
+    restart: "no"
+    env_file:
+      - .env
+    command: ["npx", "prisma", "migrate", "deploy"]
+    networks:
+      - app-network
+
+  ubc-ocpi-adaptor:
+    image: harishsahu/ubc-ocpi-adaptor-release-v2-app:v1
+    restart: unless-stopped
+    ports:
+      - "6001:6001"
+    depends_on:
+      - migrate
+      - ocpi-simulator
+    env_file:
+      - .env
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
