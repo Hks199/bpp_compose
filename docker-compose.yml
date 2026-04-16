@@ -58,7 +58,7 @@ services:
       - app-network
 
   ubc-ocpi-adaptor:
-    image: harishsahu/ubc-ocpi-adaptor-release-v2-app:v1
+    image: harishsahu/ubc-ocpi-adaptor-release-v2-app:v6
     container_name: ubc-ocpi-adaptor
     restart: unless-stopped
     ports:

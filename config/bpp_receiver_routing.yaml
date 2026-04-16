@@ -5,7 +5,7 @@ routingRules:
     version: "2.0.0"
     targetType: url
     target:
-      url: http://app:6001/ubc
+      url: https://uat-bpp-opci-adapter.ubc.nbsl.org.in/ubc
       excludeAction: false
     endpoints:
       - select
